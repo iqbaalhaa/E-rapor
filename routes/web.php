@@ -14,6 +14,9 @@ use App\Http\Controllers\PindahKelasController;
 use App\Http\Controllers\WaliKelasController;
 use App\Http\Controllers\InputNilaiController;
 use App\Http\Controllers\DashboardWaliKelasController;
+use App\Http\Controllers\JadwalMengajarController;
+use App\Http\Controllers\NilaiGuruController;
+use App\Http\Controllers\CetakRaporController;
 
 
 /*
@@ -100,7 +103,7 @@ Route::middleware(['auth', 'role:guru'])->group(function () {
     Route::get('/dashboard/guru', [App\Http\Controllers\DashboardGuruController::class, 'index'])->name('dashboard.guru');
 });
 
-Route::middleware(['auth', 'role:guru'])->group(function () {
+Route::middleware(['auth', 'role:guru|walikelas'])->group(function () {
     Route::get('input-nilai', [InputNilaiController::class, 'index'])->name('input-nilai.index');
     Route::get('input-nilai/{id}', [InputNilaiController::class, 'show'])->name('input-nilai.show');
     Route::post('input-nilai', [InputNilaiController::class, 'store'])->name('input-nilai.store');
@@ -114,6 +117,18 @@ Route::middleware(['auth', 'role:walikelas'])->group(function () {
     Route::get('/dashboard/walikelas', [DashboardWaliKelasController::class, 'index'])->name('dashboard.walikelas');
 });
 
-Route::resource('/jadwal-mengajar', JadwalMengajar::class);
-Route::resource('/nilai-guru', NilaiGuru::class);
-Route::resource('/rapor', Rapor::class);
+Route::middleware(['auth', 'role:walikelas'])->group(function () {
+    Route::resource('jadwal-mengajar', JadwalMengajarController::class);
+});
+
+Route::middleware(['auth', 'role:walikelas'])->group(function () {
+    Route::get('nilai-guru', [NilaiGuruController::class, 'index'])->name('nilai-guru.index');
+    Route::get('nilai-guru/{siswa}', [NilaiGuruController::class, 'edit'])->name('nilai-guru.edit');
+    Route::put('nilai-guru/{siswa}', [NilaiGuruController::class, 'update'])->name('nilai-guru.update');
+});
+
+Route::middleware(['auth', 'role:walikelas'])->group(function () {
+    Route::get('rapor', [CetakRaporController::class, 'index'])->name('rapor.index');
+    Route::get('rapor/{siswa}', [CetakRaporController::class, 'show'])->name('rapor.show');
+});
+
