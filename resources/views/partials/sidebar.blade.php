@@ -65,7 +65,7 @@
 
       {{-- 5. Cetak Raport --}}
       <li class="nav-item">
-        <a class="nav-link" href="{{ route('rapor.index') }}">
+        <a class="nav-link" href="{{ route('admin.rapor.index') }}">
           <i class="icon-printer menu-icon"></i>
           <span class="menu-title">Cetak Raport</span>
         </a>
