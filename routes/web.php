@@ -17,6 +17,7 @@ use App\Http\Controllers\DashboardWaliKelasController;
 use App\Http\Controllers\JadwalMengajarController;
 use App\Http\Controllers\NilaiGuruController;
 use App\Http\Controllers\CetakRaporController;
+use App\Http\Controllers\Admin\CetakRaporController as AdminCetakRaporController;
 
 
 /*
@@ -95,6 +96,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('wali-kelas', WaliKelasController::class)->only(['index', 'create', 'store', 'destroy']);
 });
 
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('admin/rapor', [AdminCetakRaporController::class, 'index'])->name('admin.rapor.index');
+    Route::get('admin/rapor/{siswa}', [AdminCetakRaporController::class, 'show'])->name('admin.rapor.show');
+});
+
+Route::get('admin/rapor-kelas/{kelas_id}', [AdminCetakRaporController::class, 'cetakKelas'])->name('admin.rapor.kelas');
 
 
 //Route Buat Guru 
