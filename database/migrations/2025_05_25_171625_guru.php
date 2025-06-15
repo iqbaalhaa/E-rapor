@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('nama');
             $table->string('nip')->unique()->nullable();
             $table->string('email')->unique()->nullable();
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
-        
     }
 
     /**
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('guru');
     }
 };

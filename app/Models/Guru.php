@@ -13,6 +13,7 @@ class Guru extends Model
         'nama',
         'nip',
         'email',
+        'user_id'
     ];
 
     public function user()

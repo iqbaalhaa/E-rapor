@@ -63,5 +63,7 @@
   <script src="{{asset('template/js/dashboard.js')}}"></script>
   <script src="{{asset('template/js/Chart.roundedBarCharts.js')}}"></script>
   <!-- End custom js for this page-->
+
+  @stack('scripts')
 </body>
 </html>
