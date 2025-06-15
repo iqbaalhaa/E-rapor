@@ -7,6 +7,7 @@ use App\Models\WaliKelas;
 use App\Models\Guru;
 use App\Models\Kelas;
 use App\Models\TahunAkademik;
+use App\Models\User;
 
 class WaliKelasController extends Controller
 {
@@ -41,14 +42,29 @@ class WaliKelasController extends Controller
             return back()->with('error', 'Kelas ini sudah punya wali di tahun ini.');
         }
 
+        // Buat data wali kelas
         WaliKelas::create($request->all());
+
+        // Update role user menjadi walikelas
+        $guru = Guru::find($request->guru_id);
+        if ($guru && $guru->user) {
+            $guru->user->update(['role' => 'walikelas']);
+        }
 
         return redirect()->route('wali-kelas.index')->with('success', 'Wali kelas ditetapkan.');
     }
 
     public function destroy($id)
     {
-        WaliKelas::destroy($id);
+        $waliKelas = WaliKelas::findOrFail($id);
+        
+        // Kembalikan role user menjadi guru
+        $guru = Guru::find($waliKelas->guru_id);
+        if ($guru && $guru->user) {
+            $guru->user->update(['role' => 'guru']);
+        }
+
+        $waliKelas->delete();
         return redirect()->route('wali-kelas.index')->with('success', 'Data dihapus.');
     }
 }
