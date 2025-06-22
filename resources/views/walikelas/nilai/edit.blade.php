@@ -23,7 +23,7 @@
         <tbody>
           @foreach($nilai as $n)
           <tr>
-            <td>{{ $n->mapel->nama_mapel }}</td>
+            <td>{{ $n->mapel->nama }}</td>
             <td>{{ $n->guru->nama }}</td>
             <td><input type="number" name="nilai[{{ $n->id }}][pengetahuan]" value="{{ $n->nilai_pengetahuan }}" class="form-control"></td>
             <td><input type="number" name="nilai[{{ $n->id }}][keterampilan]" value="{{ $n->nilai_keterampilan }}" class="form-control"></td>
@@ -32,9 +32,10 @@
           @endforeach
         </tbody>
       </table>
+      <br>
 
-      <button type="submit" class="btn btn-success">Simpan Perubahan</button>
-      <a href="{{ route('nilai-guru.index') }}" class="btn btn-secondary">Kembali</a>
+      <button type="submit" class="btn btn-success"><b>Simpan</b></button>
+      <a href="{{ route('nilai-guru.index') }}" class="btn btn-secondary"><b>Kembali</b></a>
     </form>
   </div>
 </div>
