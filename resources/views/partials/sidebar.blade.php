@@ -76,7 +76,7 @@
             </li>
 
             {{-- GURU MENU --}}
-        @elseif(auth()->user()->role == 'guru')
+        @elseif(auth()->user()->role == 'guru' || auth()->user()->role == 'walikelas')
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('input-nilai.index') }}">
                     <i class="icon-bar-graph menu-icon"></i>
@@ -87,54 +87,34 @@
             {{-- WALI KELAS MENU --}}
             @if (auth()->user()->role == 'walikelas')
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('dashboard.walikelas') }}">
-                        <i class="icon-grid menu-icon"></i>
-                        <span class="menu-title">Dashboard</span>
+                    <a class="nav-link" href="{{ route('walikelas.siswa.index') }}">
+                        <i class="icon-account-multiple-outline menu-icon"></i>
+                        <span class="menu-title">Data Siswa</span>
+                    </a>
+                </li>
+                {{-- Input Guru + Mapel untuk Kelas --}}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('jadwal-mengajar.index') }}">
+                        <i class="icon-briefcase menu-icon"></i>
+                        <span class="menu-title">Atur Pengampu Mapel</span>
+                    </a>
+                </li>
+                {{-- Lihat Nilai dari Guru --}}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('nilai-guru.index') }}">
+                        <i class="icon-bar-graph menu-icon"></i>
+                        <span class="menu-title">Nilai dari Guru</span>
+                    </a>
+                </li>
+                {{-- Cetak Raport --}}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('rapor.index') }}">
+                        <i class="icon-printer menu-icon"></i>
+                        <span class="menu-title">Cetak Raport</span>
                     </a>
                 </li>
             @endif
-        @elseif(auth()->user()->role == 'walikelas')
-            {{-- Input Nilai untuk Guru yang juga Wali Kelas --}}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('input-nilai.index') }}">
-                    <i class="icon-bar-graph menu-icon"></i>
-                    <span class="menu-title">Input Nilai</span>
-                </a>
-            </li>
-
-            {{-- Input Guru + Mapel untuk Kelas --}}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('jadwal-mengajar.index') }}">
-                    <i class="icon-briefcase menu-icon"></i>
-                    <span class="menu-title">Atur Pengampu Mapel</span>
-                </a>
-            </li>
-
-            {{-- Lihat Nilai dari Guru --}}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('nilai-guru.index') }}">
-                    <i class="icon-bar-graph menu-icon"></i>
-                    <span class="menu-title">Nilai dari Guru</span>
-                </a>
-            </li>
-
-            {{-- Cetak Raport --}}
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('rapor.index') }}">
-                    <i class="icon-printer menu-icon"></i>
-                    <span class="menu-title">Cetak Raport</span>
-                </a>
-            </li>
-
         @endif
-
-        {{-- PROFILE MENU - Untuk semua role --}}
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('profile.edit') }}">
-                <i class="ti-user menu-icon"></i>
-                <span class="menu-title">Edit Profil</span>
-            </a>
-        </li>
 
     </ul>
 </nav>
