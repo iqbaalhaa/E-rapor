@@ -67,51 +67,22 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('tahun-akademik', TahunAkademikController::class);
-});
-
-Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('guru', GuruController::class);
-});
-
-Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('siswa', SiswaController::class);
-});
-
-Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('mapel', MapelController::class);
-});
-
-Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('kelas', KelasController::class);
     Route::put('kelas/{kela}', [KelasController::class, 'update'])->name('kelas.update');
-});
-
-Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('user', UserController::class);
-});
-
-Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('mengajar', MengajarController::class);
-});
-
-Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('pindah-kelas', PindahKelasController::class)->only(['index', 'create', 'store', 'destroy']);
-});
-
-Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('wali-kelas', WaliKelasController::class)->only(['index', 'create', 'store', 'destroy']);
-});
-
-Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('admin/rapor', [AdminCetakRaporController::class, 'index'])->name('admin.rapor.index');
     Route::get('admin/rapor/{siswa}', [AdminCetakRaporController::class, 'show'])->name('admin.rapor.show');
+    Route::get('admin/rapor-kelas/{kelas_id}', [AdminCetakRaporController::class, 'cetakKelas'])->name('admin.rapor.kelas');
 });
 
-Route::get('admin/rapor-kelas/{kelas_id}', [AdminCetakRaporController::class, 'cetakKelas'])->name('admin.rapor.kelas');
 
-
-//Route Buat Guru 
-
+//--- GURU & WALI KELAS ---//
 Route::middleware(['auth', 'role:guru|walikelas'])->group(function () {
     Route::get('input-nilai', [InputNilaiController::class, 'index'])->name('input-nilai.index');
     Route::get('input-nilai/{id}', [InputNilaiController::class, 'show'])->name('input-nilai.show');
@@ -119,27 +90,21 @@ Route::middleware(['auth', 'role:guru|walikelas'])->group(function () {
 });
 
 
-
-//Buat Walikelas
-
-Route::middleware(['auth', 'role:walikelas'])->prefix('walikelas')->group(function(){
-    Route::get('/dashboard', function() { return view('walikelas.dashboard'); })->name('walikelas.dashboard');
-    Route::get('/nilai', function() { return view('walikelas.dashboard'); })->name('walikelas.nilai.index');
-    Route::get('/rapor', function() { return view('walikelas.dashboard'); })->name('walikelas.rapor.index');
-    Route::get('/jadwal', function() { return view('walikelas.dashboard'); })->name('walikelas.jadwal.index');
-});
-
+//--- WALI KELAS ---//
 Route::middleware(['auth', 'role:walikelas'])->group(function () {
+    Route::get('/dashboard/walikelas', function() { return view('walikelas.dashboard'); })->name('walikelas.dashboard');
+
+    // CRUD Siswa oleh Wali Kelas
+    Route::get('walikelas/siswa', [WaliKelasController::class, 'indexSiswa'])->name('walikelas.siswa.index');
+    Route::get('walikelas/siswa/create', [WaliKelasController::class, 'createSiswa'])->name('walikelas.siswa.create');
+    Route::post('walikelas/siswa', [WaliKelasController::class, 'storeSiswa'])->name('walikelas.siswa.store');
+
     Route::resource('jadwal-mengajar', JadwalMengajarController::class);
-});
 
-Route::middleware(['auth', 'role:walikelas'])->group(function () {
     Route::get('nilai-guru', [NilaiGuruController::class, 'index'])->name('nilai-guru.index');
     Route::get('nilai-guru/{siswa}', [NilaiGuruController::class, 'edit'])->name('nilai-guru.edit');
     Route::put('nilai-guru/{siswa}', [NilaiGuruController::class, 'update'])->name('nilai-guru.update');
-});
 
-Route::middleware(['auth', 'role:walikelas'])->group(function () {
     Route::get('rapor', [CetakRaporController::class, 'index'])->name('rapor.index');
     Route::get('rapor/{siswa}', [CetakRaporController::class, 'show'])->name('rapor.show');
 });
