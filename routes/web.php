@@ -13,7 +13,6 @@ use App\Http\Controllers\MengajarController;
 use App\Http\Controllers\PindahKelasController;
 use App\Http\Controllers\WaliKelasController;
 use App\Http\Controllers\InputNilaiController;
-use App\Http\Controllers\DashboardWaliKelasController;
 use App\Http\Controllers\JadwalMengajarController;
 use App\Http\Controllers\NilaiGuruController;
 use App\Http\Controllers\CetakRaporController;
@@ -106,10 +105,6 @@ Route::get('admin/rapor-kelas/{kelas_id}', [AdminCetakRaporController::class, 'c
 
 //Route Buat Guru 
 
-Route::middleware(['auth', 'role:guru'])->group(function () {
-    Route::get('/dashboard/guru', [App\Http\Controllers\DashboardGuruController::class, 'index'])->name('dashboard.guru');
-});
-
 Route::middleware(['auth', 'role:guru|walikelas'])->group(function () {
     Route::get('input-nilai', [InputNilaiController::class, 'index'])->name('input-nilai.index');
     Route::get('input-nilai/{id}', [InputNilaiController::class, 'show'])->name('input-nilai.show');
@@ -120,8 +115,11 @@ Route::middleware(['auth', 'role:guru|walikelas'])->group(function () {
 
 //Buat Walikelas
 
-Route::middleware(['auth', 'role:walikelas'])->group(function () {
-    Route::get('/dashboard/walikelas', [DashboardWaliKelasController::class, 'index'])->name('dashboard.walikelas');
+Route::middleware(['auth', 'role:walikelas'])->prefix('walikelas')->group(function(){
+    Route::get('/dashboard', function() { return view('walikelas.dashboard'); })->name('walikelas.dashboard');
+    Route::get('/nilai', function() { return view('walikelas.dashboard'); })->name('walikelas.nilai.index');
+    Route::get('/rapor', function() { return view('walikelas.dashboard'); })->name('walikelas.rapor.index');
+    Route::get('/jadwal', function() { return view('walikelas.dashboard'); })->name('walikelas.jadwal.index');
 });
 
 Route::middleware(['auth', 'role:walikelas'])->group(function () {
