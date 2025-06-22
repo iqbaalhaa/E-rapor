@@ -21,20 +21,20 @@ class InputNilaiController extends Controller
             'guru' => $guru
         ]);
 
-        if (!$guru) {
+        // Jika bukan admin dan tidak ada data guru
+        if ($user->role !== 'admin' && !$guru) {
             return back()->with('error', 'Data guru tidak ditemukan. Silahkan hubungi admin untuk menghubungkan akun Anda dengan data guru.');
         }
 
-        // Debug data mapel
-        $mapel = \App\Models\Mapel::find(3);
-        \Log::info('Data mapel:', [
-            'mapel' => $mapel ? $mapel->toArray() : 'null'
-        ]);
-
-        // Jika user adalah wali kelas, ambil data mengajar dari guru_id
-        $jadwal = Mengajar::where('guru_id', $guru->id)
-            ->with(['kelas', 'mapel'])
-            ->get();
+        // Ambil data jadwal mengajar
+        $jadwal = Mengajar::with(['kelas', 'mapel', 'guru']);
+        
+        // Jika bukan admin, filter berdasarkan guru
+        if ($user->role !== 'admin') {
+            $jadwal = $jadwal->where('guru_id', $guru->id);
+        }
+        
+        $jadwal = $jadwal->get();
 
         \Log::info('Data jadwal detail:', [
             'count' => $jadwal->count(),
@@ -49,7 +49,10 @@ class InputNilaiController extends Controller
             })->toArray()
         ]);
 
-        return view('guru.nilai.index', compact('jadwal'));
+        // Tentukan view berdasarkan role
+        $view = $user->role === 'admin' ? 'admin.nilai.index' : 'guru.nilai.index';
+
+        return view($view, compact('jadwal'));
     }
 
     public function show($jadwal_id)
@@ -57,14 +60,20 @@ class InputNilaiController extends Controller
         $user = auth()->user();
         $guru = $user->guru;
 
-        if (!$guru) {
+        // Jika user adalah admin, tidak perlu cek guru
+        if ($user->role !== 'admin' && !$guru) {
             return back()->with('error', 'Data guru tidak ditemukan.');
         }
 
         $jadwal = Mengajar::with(['kelas', 'mapel'])
-            ->where('id', $jadwal_id)
-            ->where('guru_id', $guru->id) // Pastikan jadwal milik guru ini
-            ->firstOrFail();
+            ->where('id', $jadwal_id);
+            
+        // Jika bukan admin, pastikan jadwal milik guru ini
+        if ($user->role !== 'admin') {
+            $jadwal = $jadwal->where('guru_id', $guru->id);
+        }
+        
+        $jadwal = $jadwal->firstOrFail();
 
         $kelas_id = $jadwal->kelas_id;
         $mapel_id = $jadwal->mapel_id;
@@ -75,7 +84,18 @@ class InputNilaiController extends Controller
                   ->with('siswa')
                   ->get();
 
-        return view('guru.nilai.input', compact('jadwal', 'siswa', 'mapel_id', 'guru_id', 'tahun_id', 'kelas_id'));
+        // Ambil data nilai yang sudah ada
+        $nilai_siswa = NilaiSiswa::where('mapel_id', $mapel_id)
+                        ->where('kelas_id', $kelas_id)
+                        ->where('guru_id', $guru_id)
+                        ->where('tahun_akademik_id', $tahun_id)
+                        ->get()
+                        ->keyBy('siswa_id');
+
+        // Tentukan view berdasarkan role
+        $view = $user->role === 'admin' ? 'admin.nilai.input' : 'guru.nilai.input';
+
+        return view($view, compact('jadwal', 'siswa', 'mapel_id', 'guru_id', 'tahun_id', 'kelas_id', 'nilai_siswa'));
     }
 
     public function store(Request $request)

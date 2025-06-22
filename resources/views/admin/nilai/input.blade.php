@@ -7,6 +7,12 @@
   <div class="card-body">
     <h4 class="card-title">Input Nilai {{ $jadwal->kelas->nama_kelas }} - {{ $jadwal->mapel->nama_mapel }}</h4>
 
+    @if(session('success'))
+      <div class="alert alert-success">
+        {{ session('success') }}
+      </div>
+    @endif
+
     <form action="{{ route('input-nilai.store') }}" method="POST">
       @csrf
       <input type="hidden" name="mapel_id" value="{{ $mapel_id }}">
@@ -27,9 +33,26 @@
           @foreach($siswa as $row)
           <tr>
             <td>{{ $row->siswa->nama }}</td>
-            <td><input type="number" name="nilai[{{ $row->siswa->id }}][pengetahuan]" class="form-control" required></td>
-            <td><input type="number" name="nilai[{{ $row->siswa->id }}][keterampilan]" class="form-control" required></td>
-            <td><input type="text" name="nilai[{{ $row->siswa->id }}][deskripsi]" class="form-control"></td>
+            <td>
+              <input type="number" 
+                     name="nilai[{{ $row->siswa->id }}][pengetahuan]" 
+                     class="form-control" 
+                     value="{{ $nilai_siswa->get($row->siswa->id)->nilai_pengetahuan ?? '' }}" 
+                     required>
+            </td>
+            <td>
+              <input type="number" 
+                     name="nilai[{{ $row->siswa->id }}][keterampilan]" 
+                     class="form-control" 
+                     value="{{ $nilai_siswa->get($row->siswa->id)->nilai_keterampilan ?? '' }}" 
+                     required>
+            </td>
+            <td>
+              <input type="text" 
+                     name="nilai[{{ $row->siswa->id }}][deskripsi]" 
+                     class="form-control" 
+                     value="{{ $nilai_siswa->get($row->siswa->id)->deskripsi ?? '' }}">
+            </td>
           </tr>
           @endforeach
         </tbody>
