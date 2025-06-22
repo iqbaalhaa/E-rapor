@@ -88,7 +88,7 @@
             @if (auth()->user()->role == 'walikelas')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('walikelas.siswa.index') }}">
-                        <i class="icon-account-multiple-outline menu-icon"></i>
+                        <i class="ti-user menu-icon"></i>
                         <span class="menu-title">Data Siswa</span>
                     </a>
                 </li>
