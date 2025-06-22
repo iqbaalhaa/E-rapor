@@ -60,13 +60,13 @@
           </li>
           <li class="nav-item nav-profile dropdown">
             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-              <img src="{{ asset('template/images/kemenaglogo.png') }}" alt="profile"/>
+                <img src="{{ Auth::user()->photo_url }}" alt="profile"/>
               <span class="nav-profile-name"><b>{{ Auth::user()->name }}</b></span>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-              <a class="dropdown-item">
+              <a class="dropdown-item" href="{{ route('profile.edit') }}">
                 <i class="ti-settings text-primary"></i>
-                Settings
+                Edit Profil
               </a>
               <!-- Hidden logout form -->
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

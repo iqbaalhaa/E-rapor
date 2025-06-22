@@ -24,6 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'photo',
     ];
 
     /**
@@ -48,5 +49,13 @@ class User extends Authenticatable
     public function guru()
     {
         return $this->hasOne(Guru::class);
+    }
+
+    public function getPhotoUrlAttribute()
+    {
+        if ($this->photo) {
+            return asset('storage/profile-photos/' . $this->photo);
+        }
+        return asset('template/images/faces/face28.jpg');
     }
 }
