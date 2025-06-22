@@ -128,5 +128,13 @@
 
         @endif
 
+        {{-- PROFILE MENU - Untuk semua role --}}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('profile.edit') }}">
+                <i class="ti-user menu-icon"></i>
+                <span class="menu-title">Edit Profil</span>
+            </a>
+        </li>
+
     </ul>
 </nav>
