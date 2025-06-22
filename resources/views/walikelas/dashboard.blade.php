@@ -261,13 +261,13 @@
             <div class="card-body">
                 <h4 class="card-title">Aksi Cepat</h4>
                 <div class="list-group list-group-flush">
-                    <a href="{{ route('walikelas.nilai.index') }}" class="list-group-item list-group-item-action">
-                        <i class="ti-medall-alt menu-icon"></i> Lihat Rekap Nilai Siswa
+                    <a href="{{ route('walikelas.siswa.index') }}" class="list-group-item list-group-item-action">
+                        <i class="ti-medall-alt menu-icon"></i> Lihat Data Siswa
                     </a>
-                    <a href="{{ route('walikelas.rapor.index') }}" class="list-group-item list-group-item-action">
+                    <a href="{{ route('rapor.index') }}" class="list-group-item list-group-item-action">
                         <i class="ti-layout-list-thumb menu-icon"></i> Proses & Cetak Rapor
                     </a>
-                    <a href="{{ route('walikelas.jadwal.index') }}" class="list-group-item list-group-item-action">
+                    <a href="{{ route('jadwal-mengajar.index') }}" class="list-group-item list-group-item-action">
                        <i class="ti-calendar menu-icon"></i> Lihat Jadwal Mapel
                     </a>
                 </div>
