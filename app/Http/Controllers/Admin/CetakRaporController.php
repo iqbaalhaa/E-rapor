@@ -10,6 +10,13 @@ use App\Models\Siswa;
 use App\Models\NilaiSiswa;
 use App\Models\KelasSiswa;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use App\Models\WaliKelas;
+use App\Models\User;
+use App\Models\CatatanWalikelas;
+use App\Models\Ketidakhadiran;
+use App\Models\Prestasi;
+use App\Models\EkstrakurikulerSiswa;
 
 class CetakRaporController extends Controller
 {
@@ -23,6 +30,7 @@ class CetakRaporController extends Controller
 
     public function show($siswa_id)
     {
+        Carbon::setLocale('id');
         $tahun = TahunAkademik::where('is_active', 1)->first();
         $siswa = Siswa::findOrFail($siswa_id);
         $nilai = NilaiSiswa::where('siswa_id', $siswa_id)
@@ -30,14 +38,37 @@ class CetakRaporController extends Controller
                     ->with(['mapel', 'guru'])
                     ->get();
     
-        $kelas = KelasSiswa::where('siswa_id', $siswa_id)
-                    ->where('tahun_akademik_id', $tahun->id)
-                    ->with('kelas')
-                    ->first()
-                    ->kelas;
+        $kelasSiswa = \App\Models\KelasSiswa::where('siswa_id', $siswa_id)
+            ->where('tahun_akademik_id', $tahun->id)
+            ->with('kelas')
+            ->first();
+        $kelas = $kelasSiswa->kelas;
+
+        $wali = \App\Models\WaliKelas::where('kelas_id', $kelas->id)
+                            ->where('tahun_akademik_id', $tahun->id)
+                            ->with('guru')
+                            ->first();
+        $walikelas = $wali->guru ?? null;
+        
+        $kepsek = \App\Models\User::where('role', 'admin')->first();
+
+        $tanggal_cetak = Carbon::now()->translatedFormat('d F Y');
+
+        // Data Rapor Tambahan
+        $catatan_walikelas = \App\Models\CatatanWalikelas::where('siswa_id', $siswa_id)
+            ->where('tahun_akademik_id', $tahun->id)->first()->catatan ?? '';
+        $ketidakhadiran = \App\Models\Ketidakhadiran::where('siswa_id', $siswa_id)
+            ->where('tahun_akademik_id', $tahun->id)->first();
+        $prestasi = \App\Models\Prestasi::where('siswa_id', $siswa_id)
+            ->where('tahun_akademik_id', $tahun->id)->get();
+        $ekstrakurikuler = \App\Models\EkstrakurikulerSiswa::where('siswa_id', $siswa_id)
+            ->where('tahun_akademik_id', $tahun->id)->get();
     
-        return Pdf::loadView('admin.rapor.pdf', compact('siswa', 'nilai', 'kelas', 'tahun'))
-                    ->stream('rapor-'.$siswa->nama.'.pdf');
+        return Pdf::loadView('admin.rapor.pdf', compact(
+            'siswa', 'nilai', 'kelas', 'tahun', 'walikelas', 'kepsek', 'tanggal_cetak',
+            'catatan_walikelas', 'ketidakhadiran', 'prestasi', 'ekstrakurikuler'
+        ))
+            ->stream('rapor-'.$siswa->nama.'.pdf');
     }
 
     public function cetakKelas($kelas_id)

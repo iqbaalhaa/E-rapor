@@ -245,23 +245,17 @@
                 @foreach($ekstrakurikuler as $index => $eks)
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
-                    <td>{{ $eks->nama_ekskul ?? 'Ekstrakurikuler' }}</td>
-                    <td class="text-center">{{ $eks->nilai ?? '-' }}</td>
-                    <td>{{ $eks->keterangan ?? 'Keterangan belum tersedia' }}</td>
+                    <td>{{ $eks->nama_ekskul ?? '' }}</td>
+                    <td class="text-center">{{ $eks->nilai ?? '' }}</td>
+                    <td>{{ $eks->keterangan ?? '' }}</td>
                 </tr>
                 @endforeach
             @else
-                <tr>
+                <tr class="empty-row">
                     <td class="text-center">1</td>
-                    <td>OSIM</td>
-                    <td class="text-center">B</td>
-                    <td>Baik, loyal terhadap organisasi dan aktif dalam kegiatan OSIM</td>
-                </tr>
-                <tr>
-                    <td class="text-center">2</td>
-                    <td>PMR</td>
-                    <td class="text-center">B</td>
-                    <td>Baik, pertahankan kerja sama dengan anggota PMR</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
             @endif
         </tbody>
@@ -281,18 +275,13 @@
                 @foreach($prestasi as $index => $p)
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td>
-                    <td>{{ $p->jenis_prestasi ?? 'Prestasi' }}</td>
-                    <td>{{ $p->keterangan ?? 'Keterangan prestasi' }}</td>
+                    <td>{{ $p->jenis_prestasi ?? '' }}</td>
+                    <td>{{ $p->keterangan ?? '' }}</td>
                 </tr>
                 @endforeach
             @else
                 <tr class="empty-row">
                     <td class="text-center">1</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr class="empty-row">
-                    <td class="text-center">2</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -338,11 +327,11 @@
                     </div>
                 </td>
                 <td style="vertical-align: top;">
-                    Sungai Penuh, {{ $tanggal_cetak ?? '21 Desember 2024' }}<br>
-                    Wali Kelas<br><br><br><br>
+                    Enok, {{ $tanggal_cetak }}<br>
+                    Wali Kelas<br><br><br>
                     <div class="signature-line">
-                        <strong>{{ $walikelas->nama ?? 'SALIMAH, S.PdI, M.PdI' }}</strong><br>
-                        NIP. {{ $walikelas->nip ?? '196902122007012034' }}
+                        <strong>{{ $walikelas->nama ?? '' }}</strong><br>
+                        NIP. {{ $walikelas->nip ?? '' }}
                     </div>
                 </td>
             </tr>
@@ -355,8 +344,8 @@
                 <td style="text-align: right; vertical-align: top;">
                     Mengetahui,<br>Kepala Madrasah<br><br><br><br>
                     <div class="signature-line">
-                        <strong>{{ $kepsek->nama ?? 'SYAFRI JUANA, S.Pd, M.Pd' }}</strong><br>
-                        NIP. {{ $kepsek->nip ?? '197710012002121002' }}
+                        <strong>{{ $kepsek->nama ?? 'H. Junaidi,S.Ag' }}</strong><br>
+                        NIP. {{ $kepsek->nip ?? '197612192007011009' }}
                     </div>
                 </td>
             </tr>

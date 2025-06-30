@@ -18,6 +18,7 @@ use App\Http\Controllers\JadwalMengajarController;
 use App\Http\Controllers\NilaiGuruController;
 use App\Http\Controllers\CetakRaporController;
 use App\Http\Controllers\Admin\CetakRaporController as AdminCetakRaporController;
+use App\Http\Controllers\Walikelas\InputRaporController;
 
 
 /*
@@ -87,6 +88,8 @@ Route::middleware(['auth', 'role:guru|walikelas'])->group(function () {
     Route::get('input-nilai', [InputNilaiController::class, 'index'])->name('input-nilai.index');
     Route::get('input-nilai/{id}', [InputNilaiController::class, 'show'])->name('input-nilai.show');
     Route::post('input-nilai', [InputNilaiController::class, 'store'])->name('input-nilai.store');
+    Route::get('nilai', [InputRaporController::class, 'index'])->name('nilai.index');
+    Route::post('nilai/store', [InputRaporController::class, 'store'])->name('nilai.store');
 });
 
 
@@ -106,6 +109,10 @@ Route::middleware(['auth', 'role:walikelas'])->group(function () {
     Route::put('nilai-guru/{siswa}', [NilaiGuruController::class, 'update'])->name('nilai-guru.update');
 
     Route::get('rapor', [CetakRaporController::class, 'index'])->name('rapor.index');
-    Route::get('rapor/{siswa}', [CetakRaporController::class, 'show'])->name('rapor.show');
+    Route::get('rapor/{siswa_id}', [CetakRaporController::class, 'show'])->name('rapor.show');
+
+    // Route untuk input data rapor
+    Route::get('rapor/{siswa_id}/edit', [InputRaporController::class, 'edit'])->name('rapor.edit');
+    Route::post('rapor/{siswa_id}/update', [InputRaporController::class, 'update'])->name('rapor.update');
 });
 
